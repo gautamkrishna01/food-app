@@ -25,4 +25,31 @@ const registerController = async (req, resp) => {
     resp.status(500).json("Error creating  while user");
   }
 };
-module.exports = { registerController };
+//login
+
+const loginController = async (req, resp) => {
+  const { email, password } = req.body;
+  try {
+    //validation
+    if ((!email, !password)) {
+      return resp
+        .status(500)
+        .json({ success: false, message: "Please provide email or password" });
+    }
+    //check user
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return resp
+        .status(500)
+        .json({ success: false, message: "User not found" });
+    }
+    resp
+      .status(200)
+      .json({ success: true, message: "User successfully", user });
+  } catch (error) {
+    console.log(error);
+    resp.status(500).json({ error: "Error in login" });
+  }
+};
+
+module.exports = { registerController, loginController };
